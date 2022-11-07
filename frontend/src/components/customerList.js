@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
  
-const Staff = (props) => ( //Record
+const CustFunc = (props) => ( //Record
  <tr>
-   <td>{props.staff.name}</td>
-   <td>{props.staff.number}</td>
-   <td>{props.staff.level}</td>
+   <td>{props.cust.name}</td>
+   <td>{props.cust.number}</td>
+   <td>{props.cust.level}</td>
    <td>
-     <Link className="btn btn-link" to={`/edit/${props.staff._id}`}>Edit</Link> |
+     <Link className="btn btn-link" to={`/edit/${props.cust._id}`}>Edit</Link> |
      <button className="btn btn-link"
        onClick={() => {
-         props.deleteStaff(props.staff._id);
+         props.deleteCustomer(props.cust._id);
        }}
      >
        Delete 
@@ -19,13 +19,13 @@ const Staff = (props) => ( //Record
  </tr>
 );
  
-export default function StaffList() {
- const [waiters, setStaff] = useState([]); //records
+export default function CustomerList() {
+ const [Customer, setCustomer] = useState([]); //records
  
  // This method fetches the records from the database.
  useEffect(() => {
-   async function getStaff() {
-     const response = await fetch(`http://localhost:3001/staff/`);
+   async function getCustomer() {
+     const response = await fetch(`http://localhost:3001/CustomerRoutes/`);
  
      if (!response.ok) {
        const message = `An error occurred: ${response.statusText}`;
@@ -33,33 +33,33 @@ export default function StaffList() {
        return;
      }
  
-     const waiters = await response.json();
-     setStaff(waiters); //setRecords(records)
+     const Customer = await response.json();
+     setCustomer(Customer); //setRecords(records)
    }
  
-   getStaff();
+   getCustomer();
  
    return;
- }, [waiters.length]); //records
+ }, [Customer.length]); //records
  
  // This method will delete a record
- async function deleteStaff(id) {
+ async function deleteCustomer(id) {
    await fetch(`http://localhost:3001/${id}`, {
      method: "DELETE"
    });
  
-   const newWaiter = waiters.filter((el) => el._id !== id);
-   setStaff(newWaiter);
+   const newWaiter = Customer.filter((el) => el._id !== id);
+   setCustomer(newWaiter);
  }
  
  // This method will map out the records on the table
- function staffList() { //recordList
-   return waiters.map((staff) => {
+ function customerList() { //recordList
+   return Customer.map((cust) => {
      return (
-       <Staff
-         staff={staff}
-         deleteStaff={() => deleteStaff(staff._id)}
-         key={staff._id}
+       <CustFunc
+         cust={cust}
+         deleteCustomer={() => deleteCustomer(cust._id)}
+         key={cust._id}
        />
      );
    });
@@ -68,7 +68,7 @@ export default function StaffList() {
  // This following section will display the table with the records of individuals.
  return (
    <div>
-     <h3>Waiter Staff List</h3>
+     <h3>Customer List</h3>
      <table className="table table-striped" style={{ marginTop: 20 }}>
        <thead>
          <tr>
@@ -78,7 +78,7 @@ export default function StaffList() {
            <th>Action</th>
          </tr>
        </thead>
-       <tbody>{staffList()}</tbody>
+       <tbody>{customerList()}</tbody>
      </table>
    </div>
  );
